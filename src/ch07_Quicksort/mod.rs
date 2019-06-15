@@ -4,10 +4,19 @@ use rand::Rng;
 use std::cmp::PartialOrd;
 
 fn partition<T: PartialOrd>(A: &mut [T]) -> usize {
+    // `partition` fails if `A` has less than 2 elements.
+    // Caller should avoid this.
     assert!(A.len() > 1);
 
+    // Note that we don't write
+    // `let ref_to_x = A.last().unwrap();` (which borrows `A` as immutable)
+    // or
+    // `let x = A.last().cloned().unwrap();` (which requires `T` to implement `Clone` trait)
     let last_index = A.len() - 1;
-    let mut i: i32 = -1;
+
+    // Note that `i` should be some signed type.
+    let mut i: i64 = -1;
+
     for j in 0..A.len() - 1 {
         if A[j] <= A[last_index] {
             i += 1;
