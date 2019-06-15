@@ -1,5 +1,6 @@
 extern crate rand;
 
+use rand::distributions::{Distribution, Uniform};
 use std::cmp::PartialOrd;
 
 pub fn assert_asc<T: PartialOrd>(arr: &[T]) {
@@ -18,10 +19,15 @@ pub fn random_vec<T>(n: usize) -> Vec<T>
 where
     rand::distributions::Standard: rand::distributions::Distribution<T>,
 {
-    let mut result = Vec::with_capacity(n);
+    (0..n).map(|_| rand::random()).collect()
+}
 
-    for _ in 0..n {
-        result.push(rand::random::<T>());
-    }
-    result
+pub fn random_vec_range<T>(n: usize, low: T, high: T) -> Vec<T>
+where
+    T: rand::distributions::uniform::SampleUniform,
+{
+    let dist = Uniform::new(low, high);
+    let mut rng = rand::thread_rng();
+
+    (0..n).map(|_| dist.sample(&mut rng)).collect()
 }
