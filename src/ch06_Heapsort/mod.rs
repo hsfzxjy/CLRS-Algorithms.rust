@@ -1,4 +1,4 @@
-use std::cmp::Ord;
+use std::cmp::PartialOrd;
 
 fn parent(i: usize) -> usize {
     (i + 1) / 2 - 1
@@ -12,14 +12,14 @@ fn right(i: usize) -> usize {
     (i + 1) * 2
 }
 
-fn init_heap<T: Ord>(A: &mut [T]) {
+fn init_heap<T: PartialOrd>(A: &mut [T]) {
     let last_parent = parent(A.len() - 1);
     for i in (0..last_parent + 1).rev() {
         heapify(A, i);
     }
 }
 
-fn heapify<T: Ord>(A: &mut [T], i: usize) {
+fn heapify<T: PartialOrd>(A: &mut [T], i: usize) {
     let (l, r) = (left(i), right(i));
     let mut largest = if l < A.len() && A[l] > A[i] { l } else { i };
     if r < A.len() && A[r] > A[largest] {
@@ -31,7 +31,7 @@ fn heapify<T: Ord>(A: &mut [T], i: usize) {
     }
 }
 
-pub fn heap_sort<T: Ord>(A: &mut [T]) {
+pub fn heap_sort<T: PartialOrd>(A: &mut [T]) {
     if A.len() <= 1 {
         return;
     }
