@@ -6,6 +6,7 @@ Rust implementation for <em>Introduction to Algorithms</em>
 ## Implemented
 
  + **Chapter 02 Getting Start**
+   + **Bubble Sort** for `[PartialOrd]`
    + **Insertion Sort** for `[PartialOrd + Clone]`
    + **Merge Sort** for `[PartialOrd + Clone]`
  + **Chapter 06 Heapsort**
