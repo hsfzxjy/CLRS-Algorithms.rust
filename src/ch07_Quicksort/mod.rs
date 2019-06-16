@@ -14,18 +14,16 @@ fn partition<T: PartialOrd>(A: &mut [T]) -> usize {
     // `let x = A.last().cloned().unwrap();` (which requires `T` to implement `Clone` trait)
     let last_index = A.len() - 1;
 
-    // Note that `i` should be some signed type.
-    let mut i: i64 = -1;
+    let mut i: usize = 0;
 
     for j in 0..A.len() - 1 {
         if A[j] <= A[last_index] {
+            A.swap(i, j);
             i += 1;
-            A.swap(i as usize, j);
         }
     }
-    let result = (i + 1) as usize;
-    A.swap(result, A.len() - 1);
-    result
+    A.swap(i, A.len() - 1);
+    i
 }
 
 fn randomized_partition<T: PartialOrd>(A: &mut [T]) -> usize {
