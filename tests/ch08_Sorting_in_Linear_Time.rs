@@ -11,7 +11,11 @@ fn counting_sort() {
 
 macro_rules! test_radix_sort {
     ($t:ty) => {
-        let mut A = common::random_vec_range::<$t>(200, Bounded::min_value(), Bounded::max_value());
+        let mut A = common::random_vec_range::<$t>(
+            200,
+            Bounded::min_value(),
+            Bounded::max_value(),
+        );
         radix_sort(A.as_mut_slice());
         common::assert_asc(&A);
     };
@@ -40,7 +44,11 @@ fn bucket_sort() {
     use num::Bounded;
     use CLRS::ch08_Sorting_in_Linear_Time::bucket_sort::bucket_sort;
 
-    let mut A = common::random_vec_range::<f64>(200, Bounded::min_value(), Bounded::max_value());
+    let mut A = common::random_vec_range::<f64>(
+        200,
+        Bounded::min_value(),
+        Bounded::max_value(),
+    );
     bucket_sort(A.as_mut_slice());
     common::assert_asc(&A);
 }

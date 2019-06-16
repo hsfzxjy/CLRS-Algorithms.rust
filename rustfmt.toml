@@ -1,0 +1,3 @@
+use_small_heuristics = "Off"
+imports_layout = "Vertical"
+max_width = 80

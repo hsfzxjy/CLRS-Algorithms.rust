@@ -1,5 +1,6 @@
 use std::cmp::PartialOrd;
 
+#[inline]
 pub fn insertion_sort<T: PartialOrd + Clone>(A: &mut [T]) {
     for j in 1..A.len() {
         let mut i: isize = j as isize - 1;

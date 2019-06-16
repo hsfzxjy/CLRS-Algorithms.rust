@@ -1,4 +1,7 @@
-use num::{Bounded, Num};
+use num::{
+    Bounded,
+    Num,
+};
 use std::cmp::PartialOrd;
 
 pub fn bucket_sort<T>(A: &mut [T])
@@ -6,7 +9,7 @@ where
     T: Bounded + Num + PartialOrd + Copy,
     T: Into<f64>,
 {
-    use super::super::ch02_Getting_Start::insertion_sort::insertion_sort;
+    use crate::ch02_Getting_Start::insertion_sort::insertion_sort;
 
     let (margin, min, max) = {
         let mut min = T::max_value();

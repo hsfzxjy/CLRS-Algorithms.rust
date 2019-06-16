@@ -26,11 +26,15 @@ fn partition<T: PartialOrd>(A: &mut [T]) -> usize {
     i
 }
 
-fn randomized_partition<T: PartialOrd>(A: &mut [T]) -> usize {
+pub fn partition_by<T: PartialOrd>(A: &mut [T], i: usize) -> usize {
+    A.swap(i, A.len() - 1);
+    partition(A)
+}
+
+pub fn randomized_partition<T: PartialOrd>(A: &mut [T]) -> usize {
     let mut rnd = rand::thread_rng();
     let q = rnd.gen_range(0, A.len());
-    A.swap(q, A.len() - 1);
-    partition(A)
+    partition_by(A, q)
 }
 
 #[derive(Copy, Clone)]

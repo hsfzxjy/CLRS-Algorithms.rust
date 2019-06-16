@@ -24,7 +24,11 @@ fn init_heap<T: PartialOrd>(A: &mut [T]) {
 
 fn heapify<T: PartialOrd>(A: &mut [T], i: usize) {
     let (l, r) = (left(i), right(i));
-    let mut largest = if l < A.len() && A[l] > A[i] { l } else { i };
+    let mut largest = if l < A.len() && A[l] > A[i] {
+        l
+    } else {
+        i
+    };
     if r < A.len() && A[r] > A[largest] {
         largest = r;
     }

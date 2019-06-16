@@ -1,7 +1,11 @@
 use std::mem;
 
 mod traits {
-    use num::{FromPrimitive, PrimInt, ToPrimitive};
+    use num::{
+        FromPrimitive,
+        PrimInt,
+        ToPrimitive,
+    };
     use std::mem;
 
     pub trait Radix: Clone {
@@ -90,8 +94,11 @@ use traits::*;
 const BUCKET_NUM: usize = 0x10;
 
 #[inline]
-pub fn fill_bucket_from_iter<T, I>(buckets: &mut Vec<Vec<T>>, iter: I, round: usize)
-where
+pub fn fill_bucket_from_iter<T, I>(
+    buckets: &mut Vec<Vec<T>>,
+    iter: I,
+    round: usize,
+) where
     T: Radix,
     I: Iterator<Item = T>,
 {

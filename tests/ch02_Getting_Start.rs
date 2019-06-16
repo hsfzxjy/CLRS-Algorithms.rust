@@ -8,7 +8,6 @@ fn insertion_sort() {
     let mut A = common::random_vec::<f64>(100);
     insertion_sort(A.as_mut_slice());
     common::assert_asc(&A);
-
 }
 
 #[test]
@@ -17,7 +16,6 @@ fn merge_sort() {
     let mut A = common::random_vec::<f64>(10);
     merge_sort(A.as_mut_slice());
     common::assert_asc(&A);
-
 }
 
 #[test]
@@ -26,5 +24,4 @@ fn bubble_sort() {
     let mut A = common::random_vec::<f64>(10);
     bubble_sort(A.as_mut_slice());
     common::assert_asc(&A);
-
 }

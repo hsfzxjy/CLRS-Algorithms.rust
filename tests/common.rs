@@ -1,6 +1,9 @@
 extern crate rand;
 
-use rand::distributions::{Distribution, Uniform};
+use rand::distributions::{
+    Distribution,
+    Uniform,
+};
 use std::cmp::PartialOrd;
 
 pub fn assert_asc<T: PartialOrd>(arr: &[T]) {
