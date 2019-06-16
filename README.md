@@ -16,3 +16,4 @@ Rust implementation for <em>Introduction to Algorithms</em>
  + **Chapter 08 Sorting in Linear Time**
    + **Counting Sort** for `[i32]`
    + **Radix Sort** for `[T]` where `T` is signed or unsigned primitive integer
+   + **Bucket Sort** for `[T]` where `T` is bounded partial-ordered numeric type
