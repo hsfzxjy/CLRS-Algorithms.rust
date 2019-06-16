@@ -1,13 +1,16 @@
 use std::cmp::PartialOrd;
 
+#[inline]
 fn parent(i: usize) -> usize {
     (i + 1) / 2 - 1
 }
 
+#[inline]
 fn left(i: usize) -> usize {
     (i + 1) * 2 - 1
 }
 
+#[inline]
 fn right(i: usize) -> usize {
     (i + 1) * 2
 }
