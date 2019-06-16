@@ -5,6 +5,8 @@ Rust implementation for <em>Introduction to Algorithms</em>
 
 ## Implemented
 
+ + Chapter 02
+   + Insertion Sort for `[PartialOrd + Clone]`
  + Chapter 06
    + Heap Sort for `[PartialOrd]`
  + Chapter 07
