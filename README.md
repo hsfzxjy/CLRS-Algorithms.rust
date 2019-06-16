@@ -18,3 +18,6 @@ Rust implementation for <em>Introduction to Algorithms</em>
    + **Counting Sort** for `[i32]`
    + **Radix Sort** for `[T]` where `T` is signed or unsigned primitive integer
    + **Bucket Sort** for `[T]` where `T` is bounded partial-ordered numeric type
+ + **Chapter 09 Medians and Order Statistics**
+   + **Randomized Order Statistics Selection** for `[PartialOrd + Copy]`, with `O(n)` time complexity in average
+   + **Stable Order Statistics Selection** for `[PartialOrd + Copy]`, with `O(n)` time complexity in the worst case 
