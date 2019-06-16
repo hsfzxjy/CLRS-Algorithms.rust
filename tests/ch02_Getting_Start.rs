@@ -10,3 +10,12 @@ fn insertion_sort() {
     common::assert_asc(&A);
 
 }
+
+#[test]
+fn merge_sort() {
+    use CLRS::ch02_Getting_Start::merge_sort::merge_sort;
+    let mut A = common::random_vec::<f64>(10);
+    merge_sort(A.as_mut_slice());
+    common::assert_asc(&A);
+
+}
