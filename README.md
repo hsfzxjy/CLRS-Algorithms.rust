@@ -21,3 +21,5 @@ Rust implementation for <em>Introduction to Algorithms</em>
  + **Chapter 09 Medians and Order Statistics**
    + **Randomized Order Statistics Selection** for `[PartialOrd + Copy]`, with `O(n)` time complexity in average
    + **Stable Order Statistics Selection** for `[PartialOrd + Copy]`, with `O(n)` time complexity in the worst case 
+ + **Chapter 10 Elementary Data Structures**
+   + **Doubly Linked List** for `[T]` with insertion and deletion at arbitary position
