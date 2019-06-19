@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use std::ptr::NonNull;
 
 pub struct DoublyLinkedList<T> {
@@ -24,18 +25,16 @@ impl<T> Node<T> {
     }
 }
 
-pub struct Position<'a, T> {
-    list: &'a mut DoublyLinkedList<T>,
+pub struct Position<T> {
+    list: RefCell<NonNull<DoublyLinkedList<T>>>,
     node: Link<T>,
 }
 
-impl<'a, T> Position<'a, T> {
-    fn new(
-        list: &'a mut DoublyLinkedList<T>,
-        node: &Link<T>,
-    ) -> Position<'a, T> {
+impl<'a, T> Position<T> {
+    fn new(list: &mut DoublyLinkedList<T>, node: &Link<T>) -> Position<T> {
+        let cell = unsafe { RefCell::new(NonNull::new_unchecked(list)) };
         Position {
-            list: list,
+            list: cell,
             node: *node,
         }
     }
@@ -48,49 +47,70 @@ impl<'a, T> Position<'a, T> {
         self.node.as_mut().map(|n| unsafe { &mut n.as_mut().data })
     }
 
-    pub fn next(&mut self) -> Option<Position<T>> {
+    pub fn next(&self) -> Option<Position<T>> {
         match self.node {
             None => None,
-            Some(mut n) => unsafe {
+            Some(n) => unsafe {
                 Some(Position {
-                    list: self.list,
-                    node: n.as_mut().next,
+                    list: self.list.clone(),
+                    node: n.as_ref().next,
                 })
             },
         }
     }
 
-    pub fn prev(&'a mut self) -> Option<Position<T>> {
+    pub fn prev(&self) -> Option<Position<T>> {
         match self.node {
             None => None,
-            Some(mut n) => unsafe {
+            Some(n) => unsafe {
                 Some(Position {
-                    list: self.list,
-                    node: n.as_mut().prev,
+                    list: self.list.clone(),
+                    node: n.as_ref().prev,
                 })
             },
         }
     }
 
     pub fn delete(self) {
-        if self.is_valid() {
-            self.list.delete(self.node);
+        unsafe {
+            if self.is_valid() {
+                self.list.borrow_mut().as_mut().delete(self.node);
+            }
         }
     }
 
     pub fn is_valid(&self) -> bool {
-        (self.list.len() == 0 && self.node.is_none())
-            || (self.list.len() > 0 && self.node.is_some())
+        unsafe {
+            if self.list.borrow_mut().as_mut().len() == 0 && self.node.is_none()
+            {
+                return true;
+            }
+            if self.list.borrow_mut().as_mut().len() > 0 && self.node.is_some()
+            {
+                return true;
+            }
+        }
+        false
     }
 
     pub fn insert_before(&mut self, data: T) {
-        if self.is_valid() {
-            self.list.insert_before(&mut self.node, data);
+        unsafe {
+            if self.is_valid() {
+                self.list
+                    .borrow_mut()
+                    .as_mut()
+                    .insert_before(&mut self.node, data);
+            }
         }
     }
     pub fn insert_after(&mut self, data: T) {
-        if self.is_valid() {
-            self.list.insert_after(&mut self.node, data);
+        unsafe {
+            if self.is_valid() {
+                self.list
+                    .borrow_mut()
+                    .as_mut()
+                    .insert_after(&mut self.node, data);
+            }
         }
     }
 }
@@ -215,7 +235,6 @@ impl<T> DoublyLinkedList<T> {
 
     pub fn delete_back(&mut self) -> Option<T> {
         self.tail.map(|tail| unsafe {
-            println!("{}", tail.as_ptr() as usize);
             let tail = Box::from_raw(tail.as_ptr());
             self.tail = tail.prev;
 
@@ -343,4 +362,6 @@ fn test_back_mut() {
     lst.insert_back(1i32);
     *lst.back().as_mut().unwrap() = 2;
     assert_eq!(*lst.back().as_ref().unwrap(), 2);
+    lst.back().prev().unwrap().next().unwrap().insert_after(10);
+    assert_eq!(*lst.back().as_ref().unwrap(), 10);
 }
