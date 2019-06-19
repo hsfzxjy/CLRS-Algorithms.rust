@@ -23,3 +23,4 @@ Rust implementation for <em>Introduction to Algorithms</em>
    + **Stable Order Statistics Selection** for `[PartialOrd + Copy]`, with `O(n)` time complexity in the worst case 
  + **Chapter 10 Elementary Data Structures**
    + **Doubly Linked List** for `[T]` with insertion and deletion at arbitary position
+   + **Stack** for `[T]` using Doubly Linked List as underlying data structure

@@ -30,7 +30,7 @@ pub struct Position<T> {
     node: Link<T>,
 }
 
-impl<'a, T> Position<T> {
+impl<T> Position<T> {
     fn new(list: &mut DoublyLinkedList<T>, node: &Link<T>) -> Position<T> {
         let cell = unsafe { RefCell::new(NonNull::new_unchecked(list)) };
         Position {
@@ -252,12 +252,32 @@ impl<T> DoublyLinkedList<T> {
         self.len
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
     pub fn front(&mut self) -> Position<T> {
         Position::new(self, &mut self.head.clone())
     }
 
+    pub fn front_ref(&self) -> Option<&T> {
+        self.head.as_ref().map(|n| unsafe { &n.as_ref().data })
+    }
+
+    pub fn front_mut(&mut self) -> Option<&mut T> {
+        self.head.as_mut().map(|n| unsafe { &mut n.as_mut().data })
+    }
+
     pub fn back(&mut self) -> Position<T> {
         Position::new(self, &mut self.tail.clone())
+    }
+
+    pub fn back_ref(&self) -> Option<&T> {
+        self.tail.as_ref().map(|n| unsafe { &n.as_ref().data })
+    }
+
+    pub fn back_mut(&mut self) -> Option<&mut T> {
+        self.tail.as_mut().map(|n| unsafe { &mut n.as_mut().data })
     }
 
     pub fn iter(&self) -> DoublyLinkedListIterator<T> {
@@ -297,71 +317,86 @@ impl<'a, T> Iterator for DoublyLinkedListIterator<'a, T> {
     }
 }
 
-#[test]
-fn test_insert_front() {
-    let mut lst = DoublyLinkedList::new();
-    lst.insert_front(3i32);
-    assert_eq!(*lst.front().as_ref().unwrap(), 3);
-    assert_eq!(*lst.back().as_ref().unwrap(), 3);
-    assert_eq!(lst.len(), 1);
-    lst.insert_front(4i32);
-    assert_eq!(*lst.front().as_ref().unwrap(), 4);
-    assert_eq!(*lst.back().as_ref().unwrap(), 3);
-    assert_eq!(lst.len(), 2);
-}
+mod tests {
+    #[test]
+    fn test_insert_front() {
+        use super::DoublyLinkedList;
 
-#[test]
-fn test_insert_back() {
-    let mut lst = DoublyLinkedList::new();
-    lst.insert_back(3i32);
-    assert_eq!(*lst.front().as_ref().unwrap(), 3);
-    assert_eq!(*lst.back().as_ref().unwrap(), 3);
-    assert_eq!(lst.len(), 1);
-    lst.insert_back(4i32);
-    assert_eq!(*lst.front().as_ref().unwrap(), 3);
-    assert_eq!(*lst.back().as_ref().unwrap(), 4);
-    assert_eq!(lst.len(), 2);
-}
-
-#[test]
-fn test_delete_front() {
-    let mut lst = DoublyLinkedList::new();
-    for i in 0..10 {
-        lst.insert_back(i);
+        let mut lst = DoublyLinkedList::new();
+        lst.insert_front(3i32);
+        assert_eq!(*lst.front().as_ref().unwrap(), 3);
+        assert_eq!(*lst.back().as_ref().unwrap(), 3);
+        assert_eq!(lst.len(), 1);
+        lst.insert_front(4i32);
+        assert_eq!(*lst.front().as_ref().unwrap(), 4);
+        assert_eq!(*lst.back().as_ref().unwrap(), 3);
+        assert_eq!(lst.len(), 2);
     }
 
-    for i in 0..10 {
-        assert_eq!(lst.delete_front().unwrap(), i);
+    #[test]
+    fn test_insert_back() {
+        use super::DoublyLinkedList;
+
+        let mut lst = DoublyLinkedList::new();
+        lst.insert_back(3i32);
+        assert_eq!(*lst.front().as_ref().unwrap(), 3);
+        assert_eq!(*lst.back().as_ref().unwrap(), 3);
+        assert_eq!(lst.len(), 1);
+        lst.insert_back(4i32);
+        assert_eq!(*lst.front().as_ref().unwrap(), 3);
+        assert_eq!(*lst.back().as_ref().unwrap(), 4);
+        assert_eq!(lst.len(), 2);
     }
-}
 
-#[test]
-fn test_delete_back() {
-    let mut lst = DoublyLinkedList::new();
-    for i in 0..10 {
-        lst.insert_back(i);
+    #[test]
+    fn test_delete_front() {
+        use super::DoublyLinkedList;
+
+        let mut lst = DoublyLinkedList::new();
+        for i in 0..10 {
+            lst.insert_back(i);
+        }
+
+        for i in 0..10 {
+            assert_eq!(lst.delete_front().unwrap(), i);
+        }
     }
 
-    for i in (0..10).rev() {
-        assert_eq!(lst.delete_back().unwrap(), i);
+    #[test]
+    fn test_delete_back() {
+        use super::DoublyLinkedList;
+
+        let mut lst = DoublyLinkedList::new();
+        for i in 0..10 {
+            lst.insert_back(i);
+        }
+
+        for i in (0..10).rev() {
+            assert_eq!(lst.delete_back().unwrap(), i);
+        }
     }
-}
 
-#[test]
-fn test_front_mut() {
-    let mut lst = DoublyLinkedList::new();
-    lst.insert_back(1i32);
-    *lst.front().as_mut().unwrap() = 2;
-    assert_eq!(*lst.front().as_ref().unwrap(), 2);
-}
+    #[test]
+    fn test_front_mut() {
+        use super::DoublyLinkedList;
 
-#[test]
-fn test_back_mut() {
-    let mut lst = DoublyLinkedList::new();
-    lst.insert_back(0i32);
-    lst.insert_back(1i32);
-    *lst.back().as_mut().unwrap() = 2;
-    assert_eq!(*lst.back().as_ref().unwrap(), 2);
-    lst.back().prev().unwrap().next().unwrap().insert_after(10);
-    assert_eq!(*lst.back().as_ref().unwrap(), 10);
+        let mut lst = DoublyLinkedList::new();
+        lst.insert_back(1i32);
+        *lst.front().as_mut().unwrap() = 2;
+        assert_eq!(*lst.front().as_ref().unwrap(), 2);
+    }
+
+    #[test]
+    fn test_back_mut() {
+        use super::DoublyLinkedList;
+
+        let mut lst = DoublyLinkedList::new();
+        lst.insert_back(0i32);
+        lst.insert_back(1i32);
+        *lst.back().as_mut().unwrap() = 2;
+        assert_eq!(*lst.back().as_ref().unwrap(), 2);
+        lst.back().prev().unwrap().next().unwrap().insert_after(10);
+        assert_eq!(*lst.back().as_ref().unwrap(), 10);
+    }
+
 }
