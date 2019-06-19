@@ -54,3 +54,24 @@ pub fn quick_sort<T: PartialOrd>(A: &mut [T], partition_type: PartitionBy) {
     quick_sort(&mut A[..q], partition_type);
     quick_sort(&mut A[q..], partition_type);
 }
+
+mod tests {
+    #[test]
+    fn quick_sort_last() {
+        use super::*;
+        use crate::common;
+        let mut A = common::random_vec::<f64>(100);
+        quick_sort(A.as_mut_slice(), PartitionBy::Last);
+        common::assert_asc(&A);
+    }
+
+    #[test]
+    fn quick_sort_random() {
+        use super::*;
+        use crate::common;
+        let mut A = common::random_vec::<f64>(100);
+        quick_sort(A.as_mut_slice(), PartitionBy::Random);
+        common::assert_asc(&A);
+    }
+
+}

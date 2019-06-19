@@ -9,3 +9,14 @@ pub fn bubble_sort<T: PartialOrd>(A: &mut [T]) {
         }
     }
 }
+
+mod tests {
+    #[test]
+    fn bubble_sort() {
+        use super::bubble_sort;
+        use crate::common;
+        let mut A = common::random_vec::<f64>(10);
+        bubble_sort(A.as_mut_slice());
+        common::assert_asc(&A);
+    }
+}

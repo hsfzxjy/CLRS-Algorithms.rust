@@ -12,3 +12,14 @@ pub fn insertion_sort<T: PartialOrd + Clone>(A: &mut [T]) {
         A[(i + 1) as usize] = key;
     }
 }
+
+mod tests {
+    #[test]
+    fn insertion_sort() {
+        use super::insertion_sort;
+        use crate::common;
+        let mut A = common::random_vec::<f64>(100);
+        insertion_sort(A.as_mut_slice());
+        common::assert_asc(&A);
+    }
+}

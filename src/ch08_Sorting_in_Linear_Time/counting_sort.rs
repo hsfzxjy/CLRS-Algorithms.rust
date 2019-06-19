@@ -17,3 +17,15 @@ pub fn counting_sort(A: &mut [i32], lower: i32, upper: i32) {
         }
     }
 }
+
+mod tests {
+    #[test]
+    fn counting_sort() {
+        use super::counting_sort;
+        use crate::common;
+        let mut A = common::random_vec_range::<i32>(100, 1050, 1100);
+        counting_sort(A.as_mut_slice(), 1050, 1100);
+        common::assert_asc(&A);
+    }
+
+}

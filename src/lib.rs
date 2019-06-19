@@ -1,5 +1,8 @@
 #![feature(box_syntax, box_into_raw_non_null)]
-#![allow(non_snake_case, dead_code)]
+#![allow(non_snake_case, dead_code, unused_macros)]
+
+pub mod common;
+
 pub mod ch02_Getting_Start;
 pub mod ch06_Heapsort;
 pub mod ch07_Quicksort;

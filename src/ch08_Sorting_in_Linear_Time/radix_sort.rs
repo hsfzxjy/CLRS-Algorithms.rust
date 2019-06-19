@@ -145,3 +145,37 @@ where
         })
     });
 }
+
+mod tests {
+    macro_rules! test_radix_sort {
+        ($t:ty) => {
+            let mut A = common::random_vec_range::<$t>(
+                200,
+                Bounded::min_value(),
+                Bounded::max_value(),
+            );
+            radix_sort(A.as_mut_slice());
+            common::assert_asc(&A);
+        };
+    }
+
+    #[test]
+    fn radix_sort() {
+        use super::radix_sort;
+        use crate::common;
+        use num::Bounded;
+
+        test_radix_sort!(i8);
+        test_radix_sort!(i16);
+        test_radix_sort!(i32);
+        test_radix_sort!(i64);
+        test_radix_sort!(isize);
+
+        test_radix_sort!(u8);
+        test_radix_sort!(u16);
+        test_radix_sort!(u32);
+        test_radix_sort!(u64);
+        test_radix_sort!(usize);
+    }
+
+}

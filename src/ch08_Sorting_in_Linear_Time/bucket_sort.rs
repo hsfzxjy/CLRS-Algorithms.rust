@@ -53,3 +53,20 @@ where
         }
     }
 }
+
+mod tests {
+    #[test]
+    fn bucket_sort() {
+        use super::bucket_sort;
+        use crate::common;
+        use num::Bounded;
+
+        let mut A = common::random_vec_range::<f64>(
+            200,
+            Bounded::min_value(),
+            Bounded::max_value(),
+        );
+        bucket_sort(A.as_mut_slice());
+        common::assert_asc(&A);
+    }
+}

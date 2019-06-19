@@ -50,3 +50,14 @@ pub fn heap_sort<T: PartialOrd>(A: &mut [T]) {
         heapify(&mut A[..i], 0);
     }
 }
+
+mod tests {
+    #[test]
+    fn heap_sort() {
+        use super::heap_sort;
+        use crate::common;
+        let mut A = common::random_vec::<f64>(100);
+        heap_sort(A.as_mut_slice());
+        common::assert_asc(&A);
+    }
+}

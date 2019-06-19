@@ -38,3 +38,20 @@ pub fn select<T: PartialOrd + Copy>(A: &mut [T], i: usize) -> T {
         select(&mut A[..q], i)
     }
 }
+
+mod tests {
+    #[test]
+    fn select() {
+        use super::select;
+        use crate::common;
+        use rand;
+        use rand::Rng;
+        let mut A = common::random_vec::<i64>(100);
+        let mut rng = rand::thread_rng();
+        let i = rng.gen_range(0, 100);
+        let x = select(A.as_mut_slice(), i);
+        A.sort();
+        assert_eq!(x, A[i]);
+    }
+
+}

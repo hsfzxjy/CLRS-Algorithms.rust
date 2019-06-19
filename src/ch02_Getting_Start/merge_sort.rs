@@ -27,3 +27,14 @@ pub fn merge_sort<T: PartialOrd + Clone>(A: &mut [T]) {
     merge(&A[..mid], &A[mid..], &mut temp);
     A.clone_from_slice(&temp);
 }
+
+mod tests {
+    #[test]
+    fn merge_sort() {
+        use super::merge_sort;
+        use crate::common;
+        let mut A = common::random_vec::<f64>(10);
+        merge_sort(A.as_mut_slice());
+        common::assert_asc(&A);
+    }
+}
