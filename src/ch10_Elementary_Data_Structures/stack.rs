@@ -23,11 +23,11 @@ impl<T> Stack<T> {
         self.list.delete_back()
     }
 
-    pub fn top_ref(&self) -> Option<&T> {
+    pub fn peek(&self) -> Option<&T> {
         self.list.back_ref()
     }
 
-    pub fn top_mut(&mut self) -> Option<&mut T> {
+    pub fn peek_mut(&mut self) -> Option<&mut T> {
         self.list.back_mut()
     }
 
@@ -47,33 +47,34 @@ mod tests {
     fn test_push() {
         let mut stack = super::Stack::new();
         stack.push('a');
-        assert_eq!(stack.size(), 1);
-        assert_eq!(*stack.top_ref().unwrap(), 'a');
+        stack.push('b');
+        assert_eq!(stack.size(), 2);
+        assert_eq!(*stack.peek().unwrap(), 'b');
     }
 
     #[test]
     fn test_pop() {
         let mut stack = super::Stack::new();
         stack.push('a');
-        assert_eq!(stack.pop().unwrap(), 'a');
-        assert_eq!(stack.size(), 0);
-    }
-
-    #[test]
-    fn test_top() {
-        let mut stack = super::Stack::new();
-        stack.push('a');
-        assert_eq!(*stack.top_ref().unwrap(), 'a');
+        stack.push('b');
+        assert_eq!(stack.pop().unwrap(), 'b');
         assert_eq!(stack.size(), 1);
     }
 
     #[test]
-    fn test_top_mut() {
+    fn test_peek() {
         let mut stack = super::Stack::new();
         stack.push('a');
-        *stack.top_mut().unwrap() = 'b';
-        assert_eq!(*stack.top_ref().unwrap(), 'b');
+        assert_eq!(*stack.peek().unwrap(), 'a');
         assert_eq!(stack.size(), 1);
     }
 
+    #[test]
+    fn test_peek_mut() {
+        let mut stack = super::Stack::new();
+        stack.push('a');
+        *stack.peek_mut().unwrap() = 'b';
+        assert_eq!(*stack.peek().unwrap(), 'b');
+        assert_eq!(stack.size(), 1);
+    }
 }
