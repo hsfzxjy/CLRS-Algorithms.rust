@@ -39,6 +39,7 @@ const LEFT: usize = 0;
 const RIGHT: usize = 1;
 const TOP: usize = !0;
 
+#[inline]
 fn replace_node<T>(
     parent: &mut TreeNode<T>,
     index: usize,
@@ -79,6 +80,7 @@ impl<T> TreeNode<T> {
         }
     }
 
+    #[inline]
     pub fn l(mut self, node: TreeNode<T>) -> Self {
         if !self.childs[LEFT].is_null() {
             panic!("Cannot set left child, as it's not empty.");
@@ -88,6 +90,7 @@ impl<T> TreeNode<T> {
         self
     }
 
+    #[inline]
     pub fn r(mut self: Self, node: TreeNode<T>) -> Self {
         if !self.childs[RIGHT].is_null() {
             panic!("Cannot set right child, as it's not empty.");
@@ -96,27 +99,93 @@ impl<T> TreeNode<T> {
         replace_node(&mut self, RIGHT, Some(box node));
         self
     }
+}
 
+impl<T> TreeNode<T> {
+    #[inline]
+    fn child(&self, index: usize) -> Option<Anchor<T>> {
+        unsafe { self.childs[index].as_mut().map(|x| Anchor::new(x)) }
+    }
+
+    #[inline]
+    fn child_unchecked(&self, index: usize) -> Anchor<T> {
+        Anchor::new(self.childs[index])
+    }
+}
+
+impl<T> TreeNode<T> {
+    #[inline]
     pub fn is_left(&self) -> bool {
         self.index == LEFT
     }
 
+    #[inline]
     pub fn is_right(&self) -> bool {
         self.index == RIGHT
     }
 
+    #[inline]
     pub fn is_root(&self) -> bool {
         self.index == TOP
     }
 
+    #[inline]
     pub fn value(&self) -> &T {
         &self.elem
     }
 
+    #[inline]
     pub fn value_mut(&mut self) -> &mut T {
         &mut self.elem
     }
 
+    #[inline]
+    pub fn left_raw(&self) -> *mut TreeNode<T> {
+        self.childs[LEFT]
+    }
+
+    #[inline]
+    pub fn right_raw(&self) -> *mut TreeNode<T> {
+        self.childs[RIGHT]
+    }
+
+    #[inline]
+    pub fn parent_raw(&self) -> *mut TreeNode<T> {
+        self.parent
+    }
+
+    #[inline]
+    pub unsafe fn left_unchecked(&self) -> Anchor<T> {
+        self.child_unchecked(LEFT)
+    }
+
+    #[inline]
+    pub unsafe fn right_unchecked(&self) -> Anchor<T> {
+        self.child_unchecked(RIGHT)
+    }
+
+    #[inline]
+    pub unsafe fn parent_unchecked(&self) -> Anchor<T> {
+        Anchor::new(self.parent)
+    }
+
+    #[inline]
+    pub fn left(&self) -> Option<Anchor<T>> {
+        self.child(LEFT)
+    }
+
+    #[inline]
+    pub fn right(&self) -> Option<Anchor<T>> {
+        self.child(RIGHT)
+    }
+
+    #[inline]
+    pub fn parent(&self) -> Option<Anchor<T>> {
+        unsafe { self.parent.as_mut().map(|x| Anchor::new(x)) }
+    }
+}
+
+impl<T> TreeNode<T> {
     pub fn replace_left(
         &mut self,
         node: Option<Box<TreeNode<T>>>,
@@ -129,50 +198,6 @@ impl<T> TreeNode<T> {
         node: Option<Box<TreeNode<T>>>,
     ) -> Option<Box<TreeNode<T>>> {
         replace_node(self, RIGHT, node)
-    }
-
-    pub unsafe fn left_raw(&self) -> *mut TreeNode<T> {
-        self.childs[LEFT]
-    }
-
-    pub unsafe fn right_raw(&self) -> *mut TreeNode<T> {
-        self.childs[RIGHT]
-    }
-
-    pub unsafe fn parent_raw(&self) -> *mut TreeNode<T> {
-        self.parent
-    }
-
-    pub unsafe fn parent_unchecked(&self) -> Anchor<T> {
-        Anchor::new(self.parent)
-    }
-
-    fn child(&self, index: usize) -> Option<Anchor<T>> {
-        unsafe { self.childs[index].as_mut().map(|x| Anchor::new(x)) }
-    }
-
-    fn child_unchecked(&self, index: usize) -> Anchor<T> {
-        Anchor::new(self.childs[index])
-    }
-
-    pub unsafe fn left_unchecked(&self) -> Anchor<T> {
-        self.child_unchecked(LEFT)
-    }
-
-    pub unsafe fn right_unchecked(&self) -> Anchor<T> {
-        self.child_unchecked(RIGHT)
-    }
-
-    pub fn left(&self) -> Option<Anchor<T>> {
-        self.child(LEFT)
-    }
-
-    pub fn right(&self) -> Option<Anchor<T>> {
-        self.child(RIGHT)
-    }
-
-    pub fn parent(&self) -> Option<Anchor<T>> {
-        unsafe { self.parent.as_mut().map(|x| Anchor::new(x)) }
     }
 }
 
@@ -246,10 +271,12 @@ impl<T> Anchor<T> {
         }
     }
 
+    #[inline]
     pub fn raw(&self) -> *mut TreeNode<T> {
         self.node
     }
 
+    #[inline]
     pub fn detach(&self) -> Box<TreeNode<T>> {
         unsafe {
             if self.is_left() {
@@ -290,7 +317,9 @@ impl<T> BinaryTree<T> {
             root: Box::into_raw(box node),
         }
     }
+}
 
+impl<T> BinaryTree<T> {
     pub fn replace_root(
         &mut self,
         node: Option<Box<TreeNode<T>>>,
@@ -308,19 +337,26 @@ impl<T> BinaryTree<T> {
 
         old_node
     }
+}
 
+impl<T> BinaryTree<T> {
+    #[inline]
     pub fn root(&self) -> Option<Anchor<T>> {
         unsafe { self.root.as_mut().map(|x| Anchor::new(x)) }
     }
 
-    pub unsafe fn root_raw(&self) -> *mut TreeNode<T> {
+    #[inline]
+    pub fn root_raw(&self) -> *mut TreeNode<T> {
         self.root
     }
 
+    #[inline]
     pub unsafe fn root_unchecked(&self) -> Anchor<T> {
         Anchor::new(self.root)
     }
+}
 
+impl<T> BinaryTree<T> {
     fn traverse<F>(&self, f: &F, x: *const TreeNode<T>, order: TraverseOrder)
     where
         F: Fn(&T),
@@ -329,25 +365,23 @@ impl<T> BinaryTree<T> {
             return;
         }
 
-        unsafe {
-            let node = x.as_ref().unwrap();
+        let node = unsafe { x.as_ref().unwrap() };
 
-            match order {
-                TraverseOrder::InOrder => {
-                    f(node.value());
-                    self.traverse(f, node.left_raw(), order);
-                    self.traverse(f, node.right_raw(), order);
-                }
-                TraverseOrder::PreOrder => {
-                    self.traverse(f, node.left_raw(), order);
-                    f(node.value());
-                    self.traverse(f, node.right_raw(), order);
-                }
-                TraverseOrder::PostOrder => {
-                    self.traverse(f, node.left_raw(), order);
-                    self.traverse(f, node.right_raw(), order);
-                    f(node.value());
-                }
+        match order {
+            TraverseOrder::InOrder => {
+                f(node.value());
+                self.traverse(f, node.left_raw(), order);
+                self.traverse(f, node.right_raw(), order);
+            }
+            TraverseOrder::PreOrder => {
+                self.traverse(f, node.left_raw(), order);
+                f(node.value());
+                self.traverse(f, node.right_raw(), order);
+            }
+            TraverseOrder::PostOrder => {
+                self.traverse(f, node.left_raw(), order);
+                self.traverse(f, node.right_raw(), order);
+                f(node.value());
             }
         }
     }
@@ -364,25 +398,23 @@ impl<T> BinaryTree<T> {
             return;
         }
 
-        unsafe {
-            let node = x.as_mut().unwrap();
+        let node = unsafe { x.as_mut().unwrap() };
 
-            match order {
-                TraverseOrder::InOrder => {
-                    f(node.value_mut());
-                    self.traverse_mut(f, node.left_raw(), order);
-                    self.traverse_mut(f, node.right_raw(), order);
-                }
-                TraverseOrder::PreOrder => {
-                    self.traverse_mut(f, node.left_raw(), order);
-                    f(node.value_mut());
-                    self.traverse_mut(f, node.right_raw(), order);
-                }
-                TraverseOrder::PostOrder => {
-                    self.traverse_mut(f, node.left_raw(), order);
-                    self.traverse_mut(f, node.right_raw(), order);
-                    f(node.value_mut());
-                }
+        match order {
+            TraverseOrder::InOrder => {
+                f(node.value_mut());
+                self.traverse_mut(f, node.left_raw(), order);
+                self.traverse_mut(f, node.right_raw(), order);
+            }
+            TraverseOrder::PreOrder => {
+                self.traverse_mut(f, node.left_raw(), order);
+                f(node.value_mut());
+                self.traverse_mut(f, node.right_raw(), order);
+            }
+            TraverseOrder::PostOrder => {
+                self.traverse_mut(f, node.left_raw(), order);
+                self.traverse_mut(f, node.right_raw(), order);
+                f(node.value_mut());
             }
         }
     }

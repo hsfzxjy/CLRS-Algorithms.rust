@@ -25,3 +25,15 @@ Rust implementation for <em>Introduction to Algorithms</em>
    + **Doubly Linked List** for `T` with insertion and deletion at arbitary position
    + **Stack** for `T` using Doubly Linked List as underlying data structure
    + **Queue** for `T` using Doubly Linked List as underlying data structure
+   + Efficient **BinaryTree** for `T` with
+     + intuitive constructor
+     + an `Anchor` struct for referencing node
+     + support for replacing and detaching tree node
+     + support for in/pre/post-order traverse
+     + support for equality test
+ + **Chapter 12 Binary Search Trees**
+   + **BST** for `PartialOrd + Copy` with support for
+     + insertion
+     + deletion
+     + maximum and minimum query from arbitary position
+     + search by given key
