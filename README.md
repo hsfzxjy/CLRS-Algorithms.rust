@@ -1,5 +1,5 @@
 # CLRS-rust-implementation
-[![Build Status](https://travis-ci.com/hsfzxjy/CLRS-rust-implementation.svg?branch=master)](https://travis-ci.com/hsfzxjy/CLRS-rust-implementation)
+[![Build Status](https://travis-ci.com/hsfzxjy/CLRS-Algorithms.rust.svg?branch=master)](https://travis-ci.com/hsfzxjy/CLRS-Algorithms.rust)
 
 Rust implementation for <em>Introduction to Algorithms</em>
 
