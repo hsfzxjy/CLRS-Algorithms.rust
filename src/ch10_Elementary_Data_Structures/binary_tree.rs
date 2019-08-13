@@ -337,6 +337,20 @@ impl<T> BinaryTree<T> {
 
         old_node
     }
+
+    pub unsafe fn left_rotate(&mut self, x: &mut Anchor<T>) {
+        let x_pos = (*x).index;
+        let mut y = x.replace_right(None).unwrap();
+
+        x.replace_right(y.replace_left(None));
+        y.replace_left(Some(x.detach()));
+
+        if x_pos == TOP {
+            self.replace_root(Some(y));
+        } else if x_pos == LEFT {
+            // TODO
+        }
+    }
 }
 
 impl<T> BinaryTree<T> {

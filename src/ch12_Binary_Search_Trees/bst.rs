@@ -142,7 +142,7 @@ mod tests {
     use super::BST;
     use crate::ch10_Elementary_Data_Structures::binary_tree::*;
 
-    #[rustfmt_skip]
+    #[rustfmt::skip]
     #[test]
     fn test_insert() {
         let mut tree = BST::new();
@@ -180,7 +180,7 @@ mod tests {
         );
     }
 
-    #[rustfmt_skip]
+    #[rustfmt::skip]
     #[test]
     fn test_delete() {
         let mut tree = BST::new();

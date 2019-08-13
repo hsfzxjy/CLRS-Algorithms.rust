@@ -24,7 +24,7 @@ impl<T> Queue<T> {
     }
 
     pub fn deque(&mut self) -> Option<T> {
-        self.list.delete_back()
+        self.list.detach_back().map(|x| x.into_value())
     }
 
     pub fn peek(&self) -> Option<&T> {
